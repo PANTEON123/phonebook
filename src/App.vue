@@ -1,28 +1,82 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div id="title">Список контактов</div>
+    <headMenu @clear="clearHandler" @add="pageName = 'adding'" />
+    <List v-if="pageName === 'main'" :lines="lines" @delete="deleteContacts" />
+    <appContacts
+      v-if="pageName === 'adding'"
+      @cancel="pageName = 'main'"
+      @save="saveHandler"
+    />
+    <endMenu />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import headMenu from "@/components/headMenu";
+import List from "@/components/List";
+import appContacts from "@/components/appContacts";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    headMenu,
+    List,
+    appContacts,
+  },
+  data() {
+    return {
+      pageName: "main",
+      lines: [
+        { name: "Brikov Evgeny", number: "123125235" },
+        { name: "Ivan Ivanov", number: "98374597" },
+      ],
+    };
+  },
+  methods: {
+    clearHandler() {
+      this.lines = [];
+    },
+    saveHandler(data) {
+      this.lines.push(data);
+      this.pageName = "main";
+    },
+    deleteContacts(index) {
+      this.lines.splice(index, 1);
+    },
+  },
+};
 </script>
 
 <style>
+body {
+  margin: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: url('https://proprikol.ru/wp-content/uploads/2019/08/kartinki-na-zadnij-fon-16.jpg')
+}
+
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  width: 40vw;
+  height: 60vh;
+  background: rgba(255, 255, 255, 0.9);
+  color: #000;
+  font-family: Lucida Console;
+  border-radius: 0px 0px 20px 20px;
+  overflow: auto;
+}
+
+#title {
+  padding: 20px;
+  padding-bottom: 0px;
+  margin-bottom: 20px;
+  text-align: right;
+  font-size: 35px;
+}
+
+button:hover {
+  cursor: pointer;
+  transform: translateY(-2px);
 }
 </style>
