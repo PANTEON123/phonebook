@@ -8,7 +8,6 @@
       @cancel="pageName = 'main'"
       @save="saveHandler"
     />
-    <endMenu />
   </div>
 </template>
 
@@ -33,16 +32,24 @@ export default {
       ],
     };
   },
+  mounted() {
+    if (localStorage.getItem("stroka")) {
+      this.lines = JSON.parse(localStorage.getItem("stroka"));
+    }
+  },
   methods: {
     clearHandler() {
       this.lines = [];
+      localStorage.setItem("stroka", JSON.stringify(this.lines));
     },
     saveHandler(data) {
       this.lines.push(data);
+      localStorage.setItem("stroka", JSON.stringify(this.lines));
       this.pageName = "main";
     },
     deleteContacts(index) {
       this.lines.splice(index, 1);
+      localStorage.setItem("stroka", JSON.stringify(this.lines));
     },
   },
 };
@@ -54,7 +61,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: url('https://proprikol.ru/wp-content/uploads/2019/08/kartinki-na-zadnij-fon-16.jpg')
+  background: url("https://proprikol.ru/wp-content/uploads/2019/08/kartinki-na-zadnij-fon-16.jpg");
 }
 
 #app {
